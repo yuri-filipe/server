@@ -2,9 +2,9 @@ version: "3.9"
 
 services:
   app:
-  labels:
-    - "traefik.enable=true"
-    - "traefik.frontend.rule=Host:server.tylers.com.br"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:server.tylers.com.br"
   reverse-proxy:
     image: traefik
     command: --api --docker.exposedbydefault=false
