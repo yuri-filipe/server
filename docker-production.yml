@@ -7,19 +7,16 @@ services:
     container_name: "traefik"
     command:
       #- "--log.level=DEBUG"
+      - "traefik.enable=true"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+       - "traefik.frontend.rule=Host('server.tylers.com.br')"
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-  whoami:
-    image: "traefik"
-    container_name: "simple-service"-traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host('server.tylers.com.br')"
+     
