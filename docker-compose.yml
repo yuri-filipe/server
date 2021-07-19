@@ -1,8 +1,33 @@
-version: "3.9"
-services: 
+version: "3"
+services:
     app:
-        build: .
-        ports: 
-            - "3000:3000"
+        image: node:14-alpine
+        working_dir: /usr/app
+        copy: 
+            - package.json  package-lock.json ./
+            - . .
+        run: yarn
         command: yarn start
-            
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.app.rule=Host:server.tylers.com.br"
+            - "traefik.http.services.app.loadbalancer.server.port=80"
+        networks: 
+            - pi
+        
+    traefik:
+        image: 'traefik:2.3'
+        container_name: 'traefik'
+        restart: 'unless-stopped'
+        ports:
+            - '80:80'
+            - '8080:8080'
+        volumes:
+            - '/var/run/docker.sock:/var/run/docker.sock:ro'
+            - ./traefik/traefik.toml:/traefik.toml
+        networks:
+            - pi
+
+networks: 
+    pi:
+        external: true   
